@@ -3,9 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ProfinetTools"
+        xmlns:local="clr-namespace:ProfinetTools.Gui"
+        xmlns:views="clr-namespace:ProfinetTools.Gui.Views"
+        DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
         mc:Ignorable="d"
-        Title="Profinet Tools" Height="350" Width="525">
+        Title="Profinet Tools" Height="500" Width="600">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <views:AdaptersView Grid.Row="0" DataContext="{Binding AdaptersViewModel}"/>
     </Grid>
 </Window>
