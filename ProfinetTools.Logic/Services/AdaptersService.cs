@@ -7,7 +7,7 @@ namespace ProfinetTools.Logic.Services
 {
 	public class AdaptersService : IAdaptersService
 	{
-		public List<ICaptureDevice> GetDevices()
+		public List<ICaptureDevice> GetAdapters()
 		{
 			var devices = new List<ICaptureDevice>();
 

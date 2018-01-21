@@ -16,7 +16,7 @@ namespace ProfinetTools.Gui.ViewModels
 		}
 		public override void Init()
 		{
-			Adapters = adaptersService.GetDevices();
+			Adapters = adaptersService.GetAdapters();
 		}
 
 		public List<ICaptureDevice> Adapters { get; set; }

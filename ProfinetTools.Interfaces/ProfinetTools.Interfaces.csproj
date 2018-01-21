@@ -60,6 +60,7 @@
     <Compile Include="Commons\IViewModel.cs" />
     <Compile Include="Commons\IViewModelFactory.cs" />
     <Compile Include="Extensions\DisposableExtensions.cs" />
+    <Compile Include="Models\Device.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\IProfinetDeserialize.cs" />
     <Compile Include="Serialization\IProfinetSerialize.cs" />

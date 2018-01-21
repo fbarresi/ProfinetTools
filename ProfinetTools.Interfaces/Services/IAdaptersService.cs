@@ -7,6 +7,6 @@ namespace ProfinetTools.Interfaces.Services
 {
 	public interface IAdaptersService
 	{
-		List<ICaptureDevice> GetDevices();
+		List<ICaptureDevice> GetAdapters();
 	}
 }
