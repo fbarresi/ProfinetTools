@@ -44,10 +44,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LogicModuleCatalog.cs" />
+    <Compile Include="Protocols\Ethernet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protocols\DCP.cs" />
+    <Compile Include="Protocols\RPC.cs" />
+    <Compile Include="Protocols\RT.cs" />
+    <Compile Include="Protocols\VLAN.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProfinetTools.Interfaces\ProfinetTools.Interfaces.csproj">
+      <Project>{F23836B7-30F9-4A77-8EA1-8C57B7BC953F}</Project>
+      <Name>ProfinetTools.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

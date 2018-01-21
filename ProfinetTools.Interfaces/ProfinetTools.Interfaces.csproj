@@ -48,6 +48,8 @@
     <Compile Include="Commons\IViewModel.cs" />
     <Compile Include="Commons\IViewModelFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\IProfinetDeserialize.cs" />
+    <Compile Include="Serialization\IProfinetSerialize.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
