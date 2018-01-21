@@ -56,6 +56,7 @@
     <Compile Include="Protocols\RPC.cs" />
     <Compile Include="Protocols\RT.cs" />
     <Compile Include="Protocols\VLAN.cs" />
+    <Compile Include="Services\AdaptersService.cs" />
     <Compile Include="Transport\ConnectionInfoEthernet.cs" />
     <Compile Include="Transport\ProfinetEthernetTransport.cs" />
   </ItemGroup>

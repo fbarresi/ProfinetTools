@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Ninject.Modules;
+using ProfinetTools.Interfaces.Services;
+using ProfinetTools.Logic.Services;
 
 namespace ProfinetTools.Logic
 {
@@ -8,6 +10,7 @@ namespace ProfinetTools.Logic
     {
         public override void Load()
         {
+	        Bind<IAdaptersService>().To<AdaptersService>().InSingletonScope();
         }
     }
 }

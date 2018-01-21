@@ -4,9 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProfinetTools.Gui.Views"
+             xmlns:viewModels="clr-namespace:ProfinetTools.Gui.ViewModels"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance viewModels:AdaptersViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="100" d:DesignWidth="500">
     <Grid>
-        <ComboBox Margin="18" />
+        <ComboBox Margin="18" ItemsSource="{Binding Adapters}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Label Content="{Binding Description}" />
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
     </Grid>
 </UserControl>
