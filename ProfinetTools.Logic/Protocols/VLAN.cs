@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ProfinetTools.Logic.Protocols
 {
-	public class VLan
+	public class VLAN
 	{
 		public enum Priorities
 		{
