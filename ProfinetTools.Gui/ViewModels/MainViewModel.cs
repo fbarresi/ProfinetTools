@@ -21,8 +21,13 @@ namespace ProfinetTools.Gui.ViewModels
 			AdaptersViewModel = viewModelFactory.CreateViewModel<AdaptersViewModel>();
 			AdaptersViewModel.Init();
 			AdaptersViewModel.AddDisposableTo(Disposables);
+
+			DevicesViewModel = viewModelFactory.CreateViewModel<DevicesViewModel>();
+			DevicesViewModel.Init();
+			DevicesViewModel.AddDisposableTo(Disposables);
 		}
 
 		public AdaptersViewModel AdaptersViewModel { get; set; }
+		public DevicesViewModel DevicesViewModel { get; set; }
 	}
 }

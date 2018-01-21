@@ -15,5 +15,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <views:AdaptersView Grid.Row="0" DataContext="{Binding AdaptersViewModel}"/>
+        <views:DevicesView Grid.Row="1" DataContext="{Binding DevicesViewModel}"/>
     </Grid>
 </Window>
