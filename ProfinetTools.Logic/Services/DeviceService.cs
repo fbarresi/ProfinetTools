@@ -16,9 +16,8 @@ namespace ProfinetTools.Logic.Services
 		{
 			var device = new ProfinetEthernetTransport(adapter);
 			device.Open();
-			device.OnDcpMessage += new ProfinetEthernetTransport.OnDcpMessageHandler(m_device_OnDcpMessage);
 
-			Observable.FromEventPattern<ProfinetEthernetTransport.OnDcpMessageHandler, ConnectionInfoEthernet, object>(h => device.OnDcpMessage += h, h => device.OnDcpMessage -= h)
+			Observable.FromEventPattern<ProfinetEthernetTransport.OnDcpMessageHandler, ConnectionInfoEthernet, DcpMessageArgs>(h => device.OnDcpMessage += h, h => device.OnDcpMessage -= h)
 				//.Select(x=> x.)
 				;
 
@@ -36,6 +35,10 @@ namespace ProfinetTools.Logic.Services
 			if (service_id == DCP.ServiceIds.Identify_Response)
 			{
 				string mac = sender.Source.ToString();
+				string name = (string) blocks[DCP.BlockOptions.DeviceProperties_NameOfStation];
+				string ip = ((DCP.IpInfo) blocks[DCP.BlockOptions.IP_IPParameter]).Ip.ToString();
+				string type = (string) blocks[DCP.BlockOptions.DeviceProperties_DeviceVendor];
+				string role = ((DCP.DeviceRoleInfo) blocks[DCP.BlockOptions.DeviceProperties_DeviceRole]).ToString();
 				//if (m_device_infos.ContainsKey(mac)) m_device_infos.Remove(mac);
 				//m_device_infos.Add(mac, blocks);
 				//this.Invoke((MethodInvoker)delegate

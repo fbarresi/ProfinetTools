@@ -17,7 +17,7 @@ namespace ProfinetTools.Logic.Transport
 		private UInt16 lastXid = 0;
 		private bool isOpen = false;
 
-		public delegate void OnDcpMessageHandler(ConnectionInfoEthernet sender, DCP.ServiceIds serviceID, uint xid, ushort responseDelayFactor, Dictionary<DCP.BlockOptions, object> blocks);
+		public delegate void OnDcpMessageHandler(ConnectionInfoEthernet sender, DcpMessageArgs args);
 		public event OnDcpMessageHandler OnDcpMessage;
 		public delegate void OnAcyclicMessageHandler(ConnectionInfoEthernet sender, UInt16 alarmDestinationEndpoint, UInt16 alarmSourceEndpoint, RT.PDUTypes pduType, RT.AddFlags addFlags, UInt16 sendSeqNum, UInt16 ackSeqNum, UInt16 varPartLen, Stream data);
 		public event OnAcyclicMessageHandler OnAcyclicMessage;
@@ -238,7 +238,7 @@ namespace ProfinetTools.Logic.Transport
 				DCP.DecodeHeader(stream, out serviceID, out xid, out responseDelayFactor, out dcpDataLength);
 				Dictionary<DCP.BlockOptions, object> blocks;
 				DCP.DecodeAllBlocks(stream, dcpDataLength, out blocks);
-				if (OnDcpMessage != null) OnDcpMessage(sender, serviceID, xid, responseDelayFactor, blocks);
+				if (OnDcpMessage != null) OnDcpMessage(sender, new DcpMessageArgs(serviceID, xid, responseDelayFactor, blocks));
 			}
 			else if (frameID == RT.FrameIds.PTCP_DelayReqPDU)
 			{
@@ -400,11 +400,11 @@ namespace ProfinetTools.Logic.Transport
 				conn.Send(message);
 			}
 
-			private void conn_OnDcpMessage(ConnectionInfoEthernet sender, DCP.ServiceIds serviceID, uint xid, ushort responseDelayFactor, Dictionary<DCP.BlockOptions, object> blocks)
+			private void conn_OnDcpMessage(ConnectionInfoEthernet sender, DcpMessageArgs args)
 			{
-				if (xid == mXid)
+				if (args.Xid == mXid)
 				{
-					Result = blocks;
+					Result = args.Blocks;
 					IsCompleted = true;
 					mWait.Set();
 				}

@@ -68,6 +68,7 @@
     <Compile Include="Services\AdaptersService.cs" />
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Transport\ConnectionInfoEthernet.cs" />
+    <Compile Include="Transport\DcpMessageArgs.cs" />
     <Compile Include="Transport\ProfinetEthernetTransport.cs" />
   </ItemGroup>
   <ItemGroup>
