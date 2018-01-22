@@ -7,7 +7,7 @@
              xmlns:viewModels="clr-namespace:ProfinetTools.Gui.ViewModels"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance viewModels:DevicesViewModel, IsDesignTimeCreatable=True}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -16,11 +16,11 @@
         <ListView Margin="8,16" Grid.Row="0" ItemsSource="{Binding Devices}" SelectedItem="{Binding SelectedDevice}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="50" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="MAC" Width="100" DisplayMemberBinding="{Binding MAC}" />
+                    <GridViewColumn Header="Name" Width="100" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="MAC" Width="120" DisplayMemberBinding="{Binding MAC}" />
                     <GridViewColumn Header="IP" Width="80" DisplayMemberBinding="{Binding IP}" />
-                    <GridViewColumn Header="Type" Width="50" DisplayMemberBinding="{Binding Type}" />
-                    <GridViewColumn Header="Role" Width="50" DisplayMemberBinding="{Binding Role}" />
+                    <GridViewColumn Header="Type" Width="80" DisplayMemberBinding="{Binding Type}" />
+                    <GridViewColumn Header="Role" Width="80" DisplayMemberBinding="{Binding Role}" />
                 </GridView>
             </ListView.View>
         </ListView>

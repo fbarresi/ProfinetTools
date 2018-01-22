@@ -58,6 +58,8 @@ namespace ProfinetTools.Logic.Services
 				MAC = sender.Source.ToString(),
 				Name = (string)args.Blocks[DCP.BlockOptions.DeviceProperties_NameOfStation],
 				IP = ((DCP.IpInfo)args.Blocks[DCP.BlockOptions.IP_IPParameter]).Ip.ToString(),
+				SubnetMask = ((DCP.IpInfo)args.Blocks[DCP.BlockOptions.IP_IPParameter]).SubnetMask.ToString(),
+				Gateway = ((DCP.IpInfo)args.Blocks[DCP.BlockOptions.IP_IPParameter]).Gateway.ToString(),
 				Type = (string)args.Blocks[DCP.BlockOptions.DeviceProperties_DeviceVendor],
 				Role = ((DCP.DeviceRoleInfo)args.Blocks[DCP.BlockOptions.DeviceProperties_DeviceRole]).ToString()
 			};
