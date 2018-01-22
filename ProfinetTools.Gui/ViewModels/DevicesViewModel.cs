@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ProfinetTools.Interfaces.Extensions;
 using ProfinetTools.Interfaces.Models;
 using ProfinetTools.Interfaces.Services;
+using ReactiveUI;
 
 namespace ProfinetTools.Gui.ViewModels
 {
@@ -16,6 +17,7 @@ namespace ProfinetTools.Gui.ViewModels
 		private readonly IDeviceService deviceService;
 		private readonly IAdaptersService adaptersService;
 		private List<Device> devices;
+		private Device selectedDevice;
 		public ReactiveUI.ReactiveCommand RefreshCommand { get; set; }
 
 		public DevicesViewModel(IDeviceService deviceService, IAdaptersService adaptersService)
@@ -28,6 +30,11 @@ namespace ProfinetTools.Gui.ViewModels
 		{
 			RefreshCommand = ReactiveUI.ReactiveCommand.CreateFromTask(RefreshDevicesList)
 				.AddDisposableTo(Disposables);
+
+			this.WhenAnyValue(model => model.SelectedDevice)
+				.Subscribe(deviceService.SelectDevice)
+				.AddDisposableTo(Disposables)
+				;
 		}
 
 		private async Task<Unit> RefreshDevicesList()
@@ -46,6 +53,17 @@ namespace ProfinetTools.Gui.ViewModels
 			{
 				if (Equals(value, devices)) return;
 				devices = value;
+				raisePropertyChanged();
+			}
+		}
+
+		public Device SelectedDevice
+		{
+			get { return selectedDevice; }
+			set
+			{
+				if (Equals(value, selectedDevice)) return;
+				selectedDevice = value;
 				raisePropertyChanged();
 			}
 		}

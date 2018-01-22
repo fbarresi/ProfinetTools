@@ -10,5 +10,7 @@ namespace ProfinetTools.Interfaces.Services
 	public interface IDeviceService
 	{
 		Task<List<Device>> GetDevices(ICaptureDevice adapter, TimeSpan timeout);
+		void SelectDevice(Device device);
+		IObservable<Device> SelectedDevice { get; }
 	}
 }

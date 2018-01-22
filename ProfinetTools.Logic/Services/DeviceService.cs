@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using ProfinetTools.Interfaces.Extensions;
@@ -40,6 +41,15 @@ namespace ProfinetTools.Logic.Services
 
 			return devices;
 		}
+
+		private readonly BehaviorSubject<Device> selectedDeviceSubject = new BehaviorSubject<Device>(null);
+
+		public void SelectDevice(Device device)
+		{
+			selectedDeviceSubject.OnNext(device);
+		}
+
+		public IObservable<Device> SelectedDevice => selectedDeviceSubject.AsObservable();
 
 		private Device ConvertEventToDevice(ConnectionInfoEthernet sender, DcpMessageArgs args)
 		{
