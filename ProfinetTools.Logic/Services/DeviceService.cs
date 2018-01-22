@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using ProfinetTools.Interfaces.Extensions;
 using ProfinetTools.Interfaces.Models;
 using ProfinetTools.Logic.Protocols;
 using ProfinetTools.Logic.Transport;
@@ -14,43 +17,40 @@ namespace ProfinetTools.Logic.Services
 	{
 		public async Task<List<Device>> GetDevices(ICaptureDevice adapter, TimeSpan timeout)
 		{
-			var device = new ProfinetEthernetTransport(adapter);
-			device.Open();
+			var disposables = new CompositeDisposable();
+			var transport = new ProfinetEthernetTransport(adapter);
+			transport.Open();
+			transport.AddDisposableTo(disposables);
 
-			Observable.FromEventPattern<ProfinetEthernetTransport.OnDcpMessageHandler, ConnectionInfoEthernet, DcpMessageArgs>(h => device.OnDcpMessage += h, h => device.OnDcpMessage -= h)
-				//.Select(x=> x.)
+			var devices = new List<Device>();
+
+			Observable.FromEventPattern<ProfinetEthernetTransport.OnDcpMessageHandler, ConnectionInfoEthernet, DcpMessageArgs>(h => transport.OnDcpMessage += h, h => transport.OnDcpMessage -= h)
+				.Select(x => ConvertEventToDevice(x.Sender, x.EventArgs))
+				.Do(device => devices.Add(device))
+				.Subscribe()
+				.AddDisposableTo(disposables)
 				;
 
-			device.SendIdentifyBroadcast();
+			transport.SendIdentifyBroadcast();
 
 			await Task.Delay(timeout);
 
-			device.Dispose();
+			disposables.Dispose();
 
-			return null;
+			return devices;
 		}
 
-		private void m_device_OnDcpMessage(ConnectionInfoEthernet sender, DCP.ServiceIds service_id, uint xid, ushort response_delay_factor, Dictionary<DCP.BlockOptions, object> blocks)
+		private Device ConvertEventToDevice(ConnectionInfoEthernet sender, DcpMessageArgs args)
 		{
-			if (service_id == DCP.ServiceIds.Identify_Response)
+			var device = new Device()
 			{
-				string mac = sender.Source.ToString();
-				string name = (string) blocks[DCP.BlockOptions.DeviceProperties_NameOfStation];
-				string ip = ((DCP.IpInfo) blocks[DCP.BlockOptions.IP_IPParameter]).Ip.ToString();
-				string type = (string) blocks[DCP.BlockOptions.DeviceProperties_DeviceVendor];
-				string role = ((DCP.DeviceRoleInfo) blocks[DCP.BlockOptions.DeviceProperties_DeviceRole]).ToString();
-				//if (m_device_infos.ContainsKey(mac)) m_device_infos.Remove(mac);
-				//m_device_infos.Add(mac, blocks);
-				//this.Invoke((MethodInvoker)delegate
-				//{
-				//	if (DeviceList.Items.ContainsKey(mac)) DeviceList.Items.RemoveByKey(mac);
-				//	ListViewItem itm = DeviceList.Items.Add(mac, (string)blocks[DCP.BlockOptions.DeviceProperties_NameOfStation], 0);
-				//	itm.SubItems.Add(mac);
-				//	itm.SubItems.Add(((DCP.IpInfo)blocks[DCP.BlockOptions.IP_IPParameter]).Ip.ToString());
-				//	itm.SubItems.Add((string)blocks[DCP.BlockOptions.DeviceProperties_DeviceVendor]);
-				//	itm.SubItems.Add(((DCP.DeviceRoleInfo)blocks[DCP.BlockOptions.DeviceProperties_DeviceRole]).ToString());
-				//});
-			}
+				MAC = sender.Source.ToString(),
+				Name = (string)args.Blocks[DCP.BlockOptions.DeviceProperties_NameOfStation],
+				IP = ((DCP.IpInfo)args.Blocks[DCP.BlockOptions.IP_IPParameter]).Ip.ToString(),
+				Type = (string)args.Blocks[DCP.BlockOptions.DeviceProperties_DeviceVendor],
+				Role = ((DCP.DeviceRoleInfo)args.Blocks[DCP.BlockOptions.DeviceProperties_DeviceRole]).ToString()
+			};
+			return device;
 		}
 	}
 }
