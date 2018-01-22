@@ -33,7 +33,7 @@ namespace ProfinetTools.Gui.ViewModels
 		{
 			deviceService.SelectedDevice
 				.Do(device => Device = device)
-				.Do(device => DeviceName = device.Name)
+				.Do(device => DeviceName = device?.Name ?? string.Empty)
 				.ObserveOnDispatcher()
 				.Subscribe()
 				.AddDisposableTo(Disposables);
