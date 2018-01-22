@@ -65,6 +65,7 @@
     <Compile Include="Serialization\IProfinetDeserialize.cs" />
     <Compile Include="Serialization\IProfinetSerialize.cs" />
     <Compile Include="Services\IAdaptersService.cs" />
+    <Compile Include="Services\IDeviceService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

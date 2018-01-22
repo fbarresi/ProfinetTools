@@ -13,19 +13,19 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ListView Margin="8,16" Grid.Row="0">
+        <ListView Margin="8,16" Grid.Row="0" ItemsSource="{Binding Devices}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="MAC" Width="50" DisplayMemberBinding="{Binding MAC}" />
-                    <GridViewColumn Header="IP" Width="50" DisplayMemberBinding="{Binding IP}" />
+                    <GridViewColumn Header="Name" Width="50" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="MAC" Width="100" DisplayMemberBinding="{Binding MAC}" />
+                    <GridViewColumn Header="IP" Width="80" DisplayMemberBinding="{Binding IP}" />
                     <GridViewColumn Header="Type" Width="50" DisplayMemberBinding="{Binding Type}" />
-                    <GridViewColumn Header="Role" Width="150" DisplayMemberBinding="{Binding Role}" />
+                    <GridViewColumn Header="Role" Width="50" DisplayMemberBinding="{Binding Role}" />
                 </GridView>
             </ListView.View>
         </ListView>
-        <Grid Grid.Row="1">
-            <Button HorizontalAlignment="Right">Refresh</Button>
+        <Grid Grid.Row="1" Margin="8,0">
+            <Button HorizontalAlignment="Right" Command="{Binding RefreshCommand}" Padding="8">Refresh</Button>
         </Grid>
     </Grid>
 </UserControl>

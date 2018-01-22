@@ -7,13 +7,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using ProfinetTools.Interfaces.Extensions;
 using ProfinetTools.Interfaces.Models;
+using ProfinetTools.Interfaces.Services;
 using ProfinetTools.Logic.Protocols;
 using ProfinetTools.Logic.Transport;
 using SharpPcap;
 
 namespace ProfinetTools.Logic.Services
 {
-	public class DeviceService
+	public class DeviceService : IDeviceService
 	{
 		public async Task<List<Device>> GetDevices(ICaptureDevice adapter, TimeSpan timeout)
 		{

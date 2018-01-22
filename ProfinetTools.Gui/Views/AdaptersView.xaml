@@ -9,7 +9,7 @@
              d:DataContext="{d:DesignInstance viewModels:AdaptersViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="100" d:DesignWidth="500">
     <Grid>
-        <ComboBox Margin="8,16" ItemsSource="{Binding Adapters}">
+        <ComboBox Margin="8,16" ItemsSource="{Binding Adapters}" SelectedItem="{Binding SelectedAdapter}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
