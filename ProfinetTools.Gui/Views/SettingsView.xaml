@@ -7,13 +7,13 @@
              xmlns:viewModels="clr-namespace:ProfinetTools.Gui.ViewModels"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance viewModels:SettingsViewModel, IsDesignTimeCreatable=True}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition  Height="*"/>
             <RowDefinition  Height="Auto"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Settings" Grid.Row="0" Margin="8,8" DataContext="{Binding Device}">
+        <GroupBox Header="Settings" Grid.Row="0" Margin="8,8" DataContext="{Binding Device}" HorizontalAlignment="Left">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -26,13 +26,13 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">Name:</Label>
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Margin="4" MaxLength="250"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Margin="4" Width="250" HorizontalAlignment="Left"/>
                 <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">Ip:</Label>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding IP}" Margin="4" MaxLength="250"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding IP}" Margin="4" Width="250" HorizontalAlignment="Left"/>
                 <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right">Subnet mask:</Label>
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SubnetMask}" Margin="4" MaxLength="250"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SubnetMask}" Margin="4" Width="250" HorizontalAlignment="Left"/>
                 <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right">Gateway:</Label>
-                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Gateway}" Margin="4" MaxLength="250"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Gateway}" Margin="4" Width="250" HorizontalAlignment="Left"/>
             </Grid>
         </GroupBox> 
         <Grid Grid.Row="1" Margin="8" HorizontalAlignment="Left">

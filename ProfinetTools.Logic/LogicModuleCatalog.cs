@@ -12,6 +12,7 @@ namespace ProfinetTools.Logic
         {
 	        Bind<IAdaptersService>().To<AdaptersService>().InSingletonScope();
 	        Bind<IDeviceService>().To<DeviceService>().InSingletonScope();
+	        Bind<ISettingsService>().To<SettingsService>().InSingletonScope();
         }
     }
 }
