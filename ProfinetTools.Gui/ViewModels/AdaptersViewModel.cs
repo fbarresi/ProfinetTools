@@ -24,6 +24,8 @@ namespace ProfinetTools.Gui.ViewModels
 			this.WhenAnyValue(model => model.SelectedAdapter)
 				.Subscribe(adaptersService.SelectAdapter)
 				.AddDisposableTo(Disposables);
+
+			SelectedAdapter = Adapters.FirstOrDefault(device => device.Description.Contains("Ethernet") && !device.Description.Contains("Virtual"));
 		}
 
 		public List<ICaptureDevice> Adapters { get; set; }

@@ -33,7 +33,6 @@ namespace ProfinetTools.Gui.ViewModels
 		{
 			deviceService.SelectedDevice
 				.Do(device => Device = device)
-				.Do(device => DeviceName = device?.Name ?? string.Empty)
 				.ObserveOnDispatcher()
 				.Subscribe()
 				.AddDisposableTo(Disposables);
@@ -45,16 +44,15 @@ namespace ProfinetTools.Gui.ViewModels
 				.AddDisposableTo(Disposables);
 		}
 
-		public string DeviceName { get; set; }
 
 		private async Task<Unit> ResetDevice()
 		{
 			var adapter = await adaptersService.SelectedAdapter.FirstAsync().ToTask();
 			if (adapter == null) return Unit.Default;
 
-			if(Device == null || string.IsNullOrEmpty(DeviceName)) return Unit.Default;
+			if(Device == null) return Unit.Default;
 
-			var result = await settingsService.FactoryReset(adapter, DeviceName);
+			var result = await settingsService.FactoryReset(adapter, Device.MAC);
 			if (!result.Success)
 				MessageBox.Show("Device refuse: " + result.ErrorMessage, "Device Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			else
@@ -69,9 +67,9 @@ namespace ProfinetTools.Gui.ViewModels
 			var adapter = await adaptersService.SelectedAdapter.FirstAsync().ToTask();
 			if (adapter == null) return Unit.Default;
 
-			if (Device == null || string.IsNullOrEmpty(DeviceName) || !settingsService.TryParseNetworkConfiguration(Device)) return Unit.Default;
+			if (Device == null || !settingsService.TryParseNetworkConfiguration(Device)) return Unit.Default;
 
-			var result = await settingsService.SendSettings(adapter, DeviceName, Device);
+			var result = await settingsService.SendSettings(adapter, Device.MAC, Device);
 			if (!result.Success)
 				MessageBox.Show("Device refuse: " + result.ErrorMessage, "Device Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			else

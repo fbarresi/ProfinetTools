@@ -16,7 +16,7 @@ namespace ProfinetTools.Gui.ViewModels
 	{
 		private readonly IDeviceService deviceService;
 		private readonly IAdaptersService adaptersService;
-		private List<Device> devices;
+		private List<Device> devices = new List<Device>();
 		private Device selectedDevice;
 		public ReactiveUI.ReactiveCommand RefreshCommand { get; set; }
 
@@ -42,7 +42,14 @@ namespace ProfinetTools.Gui.ViewModels
 			var adapter =  await adaptersService.SelectedAdapter.FirstAsync().ToTask();
 			if(adapter == null) return Unit.Default;
 
-			Devices = await deviceService.GetDevices(adapter, TimeSpan.FromSeconds(3));
+			try
+			{
+				Devices = await deviceService.GetDevices(adapter, TimeSpan.FromSeconds(0.5));
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+			}
 			return Unit.Default;
 		}
 

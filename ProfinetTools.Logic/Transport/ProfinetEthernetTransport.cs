@@ -515,7 +515,7 @@ namespace ProfinetTools.Logic.Transport
 
 			if (result.AsyncWaitHandle.WaitOne(timeoutMs))
 			{
-				DCP.BlockErrors ret = ((DCP.ResponseStatus)r.Result[DCP.BlockOptions.Control_Response]).Error;
+				DCP.BlockErrors ret = r.Result.ContainsKey(DCP.BlockOptions.Control_Response) ? ((DCP.ResponseStatus)r.Result[DCP.BlockOptions.Control_Response]).Error : DCP.BlockErrors.NoError;
 				r.Dispose();
 				return ret;
 			}

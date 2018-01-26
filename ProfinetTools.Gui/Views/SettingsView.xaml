@@ -26,13 +26,13 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right">Name:</Label>
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Margin="4" Width="250" HorizontalAlignment="Left"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="4" Width="250" HorizontalAlignment="Left"/>
                 <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">Ip:</Label>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding IP}" Margin="4" Width="250" HorizontalAlignment="Left"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding IP, UpdateSourceTrigger=PropertyChanged}" Margin="4" Width="250" HorizontalAlignment="Left"/>
                 <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right">Subnet mask:</Label>
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SubnetMask}" Margin="4" Width="250" HorizontalAlignment="Left"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SubnetMask, UpdateSourceTrigger=PropertyChanged}" Margin="4" Width="250" HorizontalAlignment="Left"/>
                 <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right">Gateway:</Label>
-                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Gateway}" Margin="4" Width="250" HorizontalAlignment="Left"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Gateway, UpdateSourceTrigger=PropertyChanged}" Margin="4" Width="250" HorizontalAlignment="Left"/>
             </Grid>
         </GroupBox> 
         <Grid Grid.Row="1" Margin="8" HorizontalAlignment="Left">
@@ -40,8 +40,8 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Margin="0,0,8,0" Padding="8">Save</Button>
-            <Button Grid.Column="1" Margin="8,0,0,0" Padding="8">Factory Reset</Button>
+            <Button Grid.Column="0" Margin="0,0,8,0" Padding="8" Command="{Binding SaveCommand}">Save</Button>
+            <Button Grid.Column="1" Margin="8,0,0,0" Padding="8" Command="{Binding ResetCommand}">Factory Reset</Button>
         </Grid>
     </Grid>
 </UserControl>

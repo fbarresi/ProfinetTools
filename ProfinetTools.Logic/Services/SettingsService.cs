@@ -31,17 +31,18 @@ namespace ProfinetTools.Logic.Services
 			}
 		}
 
-		public Task<SaveResult> SendSettings(ICaptureDevice adapter, string deviceName, Device newSettings)
+		public Task<SaveResult> SendSettings(ICaptureDevice adapter, string macAddress, Device newSettings)
 		{
 			var disposables = new CompositeDisposable();
 			var transport = new ProfinetEthernetTransport(adapter);
 			transport.Open();
 			transport.AddDisposableTo(disposables);
 
-			System.Net.NetworkInformation.PhysicalAddress deviceAddress = System.Net.NetworkInformation.PhysicalAddress.Parse(deviceName);
 
 			try
 			{
+				System.Net.NetworkInformation.PhysicalAddress deviceAddress = System.Net.NetworkInformation.PhysicalAddress.Parse(macAddress);
+
 				DCP.BlockErrors err = transport.SendSetNameRequest(deviceAddress, timeoutInMilliseconds, retries, newSettings.Name);
 				if (err != DCP.BlockErrors.NoError) return Task.FromResult(new SaveResult(false, err.ToString()));
 

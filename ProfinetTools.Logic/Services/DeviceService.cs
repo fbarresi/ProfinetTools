@@ -28,6 +28,7 @@ namespace ProfinetTools.Logic.Services
 
 			Observable.FromEventPattern<ProfinetEthernetTransport.OnDcpMessageHandler, ConnectionInfoEthernet, DcpMessageArgs>(h => transport.OnDcpMessage += h, h => transport.OnDcpMessage -= h)
 				.Select(x => ConvertEventToDevice(x.Sender, x.EventArgs))
+				.Where(device => devices!=null)
 				.Do(device => devices.Add(device))
 				.Subscribe()
 				.AddDisposableTo(disposables)
@@ -53,17 +54,25 @@ namespace ProfinetTools.Logic.Services
 
 		private Device ConvertEventToDevice(ConnectionInfoEthernet sender, DcpMessageArgs args)
 		{
-			var device = new Device()
+			try
 			{
-				MAC = sender.Source.ToString(),
-				Name = (string)args.Blocks[DCP.BlockOptions.DeviceProperties_NameOfStation],
-				IP = ((DCP.IpInfo)args.Blocks[DCP.BlockOptions.IP_IPParameter]).Ip.ToString(),
-				SubnetMask = ((DCP.IpInfo)args.Blocks[DCP.BlockOptions.IP_IPParameter]).SubnetMask.ToString(),
-				Gateway = ((DCP.IpInfo)args.Blocks[DCP.BlockOptions.IP_IPParameter]).Gateway.ToString(),
-				Type = (string)args.Blocks[DCP.BlockOptions.DeviceProperties_DeviceVendor],
-				Role = ((DCP.DeviceRoleInfo)args.Blocks[DCP.BlockOptions.DeviceProperties_DeviceRole]).ToString()
-			};
-			return device;
+				var device = new Device()
+				{
+					MAC = sender.Source.ToString(),
+					Name = (string)args.Blocks[DCP.BlockOptions.DeviceProperties_NameOfStation],
+					IP = ((DCP.IpInfo)args.Blocks[DCP.BlockOptions.IP_IPParameter]).Ip.ToString(),
+					SubnetMask = ((DCP.IpInfo)args.Blocks[DCP.BlockOptions.IP_IPParameter]).SubnetMask.ToString(),
+					Gateway = ((DCP.IpInfo)args.Blocks[DCP.BlockOptions.IP_IPParameter]).Gateway.ToString(),
+					Type = (string)args.Blocks[DCP.BlockOptions.DeviceProperties_DeviceVendor],
+					Role = ((DCP.DeviceRoleInfo)args.Blocks[DCP.BlockOptions.DeviceProperties_DeviceRole]).ToString()
+				};
+				return device;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				return null;
+			}
 		}
 	}
 }
