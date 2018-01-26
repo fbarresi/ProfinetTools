@@ -35,8 +35,6 @@ namespace ProfinetTools.Gui.ViewModels
 				.Subscribe(deviceService.SelectDevice)
 				.AddDisposableTo(Disposables)
 				;
-
-			Devices = new List<Device>() {new Device(){Name = "pippo"}, new Device(){Name = "Pluto"} };
 		}
 
 		private async Task<Unit> RefreshDevicesList()
