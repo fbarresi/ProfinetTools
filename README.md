@@ -4,13 +4,18 @@
 Tools for profinet configuration
 
 # Requirements
-This software is based on the famouse *WinPcap* libraris
+This software is based on the famouse *WinPcap* libraris.
 
-I suggest to use the [npcap](https://nmap.org/npcap/) improvement for better performace
+I suggest to use the [npcap](https://nmap.org/npcap/) improvement for better performace.
 
 Plese download it from [here](https://nmap.org/npcap/dist/npcap-0.98.exe) and install it.
 
 During the installation choose the option **WinPcap compatibility**
+
+# Installation
+
+Dowload the latest version of ProfinetTools from [here](https://github.com/fbarresi/ProfinetTools/releases/latest)
+you just need to execute the setup.
 
 # Usage
 
