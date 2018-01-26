@@ -7,6 +7,7 @@
         xmlns:views="clr-namespace:ProfinetTools.Gui.Views"
         DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}"
         mc:Ignorable="d"
+        Icon="../Resources/logo.png"
         Title="Profinet Tools" Height="500" Width="600">
     <Grid>
         <Grid.RowDefinitions>

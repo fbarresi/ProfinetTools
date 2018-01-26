@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
+  <?define ResourcesDir="$(var.ProjectDir)\Resources" ?>
+  <?define UpgradeCode="D4C30FFC-E2F5-47D8-B81B-FA6000152D81" ?>
+
+
+  <Product Id="*" Name="ProfinetTools" Language="1033"
+           Version="!(bind.FileVersion.ProfinetToolsExe)" UpgradeCode="$(var.UpgradeCode)"
+           Manufacturer="Federico Barresi">
+    <Package InstallerVersion="200"
+             Compressed="yes"
+             InstallScope="perMachine"
+             Description="Tools for profinet analysis and configuration"
+             Manufacturer="Federico Barresi"
+             Platform="x86" />
+
+    <Media
+      Id="1"
+      Cabinet="media1.cab"
+      EmbedCab="yes" />
+
+    <Upgrade Id="$(var.UpgradeCode)">
+      <UpgradeVersion Minimum="!(bind.FileVersion.ProfinetToolsExe)"
+                      IncludeMinimum="no"
+                      OnlyDetect="yes"
+                      Language="1033"
+                      Property="NEWPRODUCTFOUND" />
+      <UpgradeVersion Minimum="0.1.0.0"
+                      IncludeMinimum="yes"
+                      Maximum="!(bind.FileVersion.ProfinetToolsExe)"
+                      IncludeMaximum="no"
+                      Language="1033"
+                      Property="UPGRADEFOUND" />
+      <UpgradeVersion Minimum="0.1.0.0" Maximum="!(bind.FileVersion.ProfinetToolsExe)"
+                      Property="PREVIOUSVERSIONSINSTALLED"
+                      IncludeMinimum="yes" IncludeMaximum="no" />
+    </Upgrade>
+
+
+    <PropertyRef Id="NETFRAMEWORK45" />
+
+
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" Order="2">1</Publish>
+      <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">1</Publish>
+
+
+    </UI>
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+    <Property Id="STARTUP" Value="1" />
+
+    <Icon Id="SuperFormIcon.ico" SourceFile="$(var.ResourcesDir)\logo.ico" />
+    <Property Id="ARPPRODUCTICON" Value="SuperFormIcon.ico" />
+
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.ResourcesDir)\installer_background.bmp" />
+
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="DesktopFolder" Name="Desktop">
+        <Component Id="ApplicationShortcutDesktop" Guid="7A9C6076-C3B0-45F6-930A-198686A12CD6">
+          <Shortcut Id="ApplicationDesktopShortcut"
+                    Name="ProfinetTools"
+                    Description="Tools for profinet analysis and configuration"
+                    Target="[#ProfinetToolsExe]"
+                    WorkingDirectory="INSTALLDIR"
+                    Icon="SuperFormIcon.ico" />
+          <RemoveFolder Id="DesktopFolder" On="uninstall" />
+          <RegistryValue
+            Root="HKCU"
+            Key="Software\Profinet_Tools"
+            Name="installedDesktop"
+            Type="integer"
+            Value="1"
+            KeyPath="yes" />
+        </Component>
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ProfinetToolsProgramsFolder" Name="profinet tools">
+          <Component Id="ApplicationShortcut" Guid="9A232E89-BF33-40E1-BF48-A980866B8CF1">
+            <Shortcut Id="ApplicationStartMenuShortcut"
+                      Name="ProfinetTools"
+                      Description="Tools for profinet analysis and configuration"
+                      Target="[#ProfinetToolsExe]"
+                      WorkingDirectory="INSTALLDIR"
+                      Icon="SuperFormIcon.ico" />
+            <RemoveFolder Id="ProfinetToolsProgramsFolder" On="uninstall" />
+            <RegistryValue
+              Root="HKCU"
+              Key="Software\Profinet_Tools"
+              Name="installedStartMenue"
+              Type="integer"
+              Value="1"
+              KeyPath="yes" />
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLDIR" Name="ProfinetTools" />
+      </Directory>
+
+    </Directory>
+
+
+    <Feature Id="ProductFeature" Title="ProfinetTools Setup" Level="1">
+      <ComponentGroupRef Id="ProfinetToolsFragments" />
+      <ComponentRef Id="ApplicationShortcutDesktop" />
+      <ComponentRef Id="ApplicationShortcut" />
+
+    </Feature>
+
+    <!-- Das was nun folgt ist schon ein wenig Finetuning CustomActions
+        siehe auch http://wix.sourceforge.net/manual-wix3/wix_xsd_customaction.htm
+    -->
+    <!-- Keinen Downgrade zulassen -->
+    <CustomAction Id="PreventDowngrading"
+                  Error="Es ist bereits eine neuere Version installiert." />
+
+    <!-- Nun noch die auszuführende Reihenfolg angeben
+        siehe auch http://wix.sourceforge.net/manual-wix3/wix_xsd_installexecutesequence.htm
+    -->
+
+
+    <InstallExecuteSequence>
+      <Custom Action="PreventDowngrading"
+              After="FindRelatedProducts">
+        NEWPRODUCTFOUND
+      </Custom>
+      <RemoveExistingProducts After="InstallFinalize" />
+    </InstallExecuteSequence>
+
+    <!-- Wenn ein neueres Produkt gerunden wurde, soll das auch in der UI ausgegeben werden
+        siehe auch http://wix.sourceforge.net/manual-wix3/wix_xsd_installuisequence.htm
+    -->
+    <InstallUISequence>
+      <Custom Action="PreventDowngrading"
+              After="FindRelatedProducts">
+        NEWPRODUCTFOUND
+      </Custom>
+    </InstallUISequence>
+
+  </Product>
+</Wix>
