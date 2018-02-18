@@ -710,7 +710,7 @@ namespace ProfinetTools.Logic.Protocols
 			if (do_pad) ret += EncodeU8(buffer, 0);
 
 			//BlockQualifier
-			ret += EncodeBlock(buffer, BlockOptions.Control_Stop, (ushort)(2 + data_length));
+			ret += EncodeBlock(buffer, BlockOptions.Control_Stop, (ushort)(2));
 			ret += EncodeU16(buffer, (ushort)qualifiers);
 
 			return ret;
