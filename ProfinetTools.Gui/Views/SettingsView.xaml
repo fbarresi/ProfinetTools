@@ -11,9 +11,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition  Height="*"/>
-            <RowDefinition  Height="Auto"/>
+            <RowDefinition  Height="24.277"/>
+            <RowDefinition Height="27.723"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Settings" Grid.Row="0" Margin="8,8" DataContext="{Binding Device}" HorizontalAlignment="Left">
+        <GroupBox Header="Settings" Grid.Row="0" Margin="8,8,0,8" DataContext="{Binding Device}" HorizontalAlignment="Left">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -34,14 +35,23 @@
                 <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right">Gateway:</Label>
                 <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Gateway, UpdateSourceTrigger=PropertyChanged}" Margin="4" Width="250" HorizontalAlignment="Left"/>
             </Grid>
-        </GroupBox> 
-        <Grid Grid.Row="1" Margin="8" HorizontalAlignment="Left">
+        </GroupBox>
+        <Grid Grid.Row="1" Margin="0,4"  Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="20*" />
+                <ColumnDefinition Width="120*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="120*" />
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="120*" />
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="120*" />
+                <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Margin="0,0,8,0" Padding="8" Command="{Binding SaveCommand}">Save</Button>
-            <Button Grid.Column="1" Margin="8,0,0,0" Padding="8" Command="{Binding ResetCommand}">Factory Reset</Button>
+            <Button IsEnabled="{Binding IsDeviceSelected, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Padding="8" Command="{Binding SaveCommand}" HorizontalAlignment="Left" Width="120" Content="Set" />
+            <Button IsEnabled="{Binding IsDeviceSelected, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Padding="8" Command="{Binding SavePermanentCommand}"  HorizontalAlignment="Left" Width="120" Content="Set Permanent" />
+            <Button IsEnabled="{Binding IsDeviceSelected, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" Padding="8" Command="{Binding ResetCommand}" HorizontalAlignment="Left" Width="120" Content="Factory Reset"/>
+            <Button IsEnabled="{Binding IsDeviceSelected, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" Padding="8" Command="{Binding LocateDeviceCommand}" Width ="120" Content="{Binding LocateButtonText, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </Grid>
 </UserControl>
