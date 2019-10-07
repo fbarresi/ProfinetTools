@@ -14,7 +14,7 @@ namespace ProfinetTools.Logic.Transport
 	public class ProfinetEthernetTransport : IDisposable
 	{
 		private ICaptureDevice adapter;
-		private UInt16 lastXid = 0;
+		private UInt32 lastXid = 0;
 		private bool isOpen = false;
 
 		public delegate void OnDcpMessageHandler(ConnectionInfoEthernet sender, DcpMessageArgs args);
@@ -382,7 +382,7 @@ namespace ProfinetTools.Logic.Transport
 		public class ProfinetAsyncDcpResult : IAsyncResult, IDisposable
 		{
 			private System.Threading.ManualResetEvent mWait = new System.Threading.ManualResetEvent(false);
-			private ushort mXid;
+			private uint mXid;
 			private ProfinetEthernetTransport mConn = null;
 
 			public object AsyncState { get; set; }
@@ -392,7 +392,7 @@ namespace ProfinetTools.Logic.Transport
 
 			public Dictionary<DCP.BlockOptions, object> Result { get; private set; }
 
-			public ProfinetAsyncDcpResult(ProfinetEthernetTransport conn, MemoryStream message, UInt16 xid)
+			public ProfinetAsyncDcpResult(ProfinetEthernetTransport conn, MemoryStream message, UInt32 xid)
 			{
 				mConn = conn;
 				conn.OnDcpMessage += new OnDcpMessageHandler(conn_OnDcpMessage);
@@ -436,7 +436,7 @@ namespace ProfinetTools.Logic.Transport
 			RT.EncodeFrameId(mem, RT.FrameIds.DCP_Get_Set_PDU);
 
 			//Profinet DCP
-			UInt16 xid = ++lastXid;
+			UInt32 xid = ++lastXid;
 			DCP.EncodeGetRequest(mem, xid, option);
 			//start Async
 			return new ProfinetAsyncDcpResult(this, mem, xid);
@@ -480,7 +480,7 @@ namespace ProfinetTools.Logic.Transport
 			RT.EncodeFrameId(mem, RT.FrameIds.DCP_Get_Set_PDU);
 
 			//Profinet DCP
-			UInt16 xid = ++lastXid;
+			UInt32 xid = ++lastXid;
 			DCP.EncodeSetRequest(mem, xid, option, qualifiers, data);
 
 			//start Async
