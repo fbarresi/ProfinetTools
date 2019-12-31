@@ -25,13 +25,13 @@ namespace ProfinetTools.Logic.Services
 
 				return true;
 			}
-			catch (Exception e)
+			catch (Exception /*e*/)
 			{
 				return false;
 			}
 		}
 
-		public Task<SaveResult> SendSettings(ICaptureDevice adapter, string macAddress, Device newSettings)
+		public Task<SaveResult> SendSettings(ICaptureDevice adapter, string macAddress, Device newSettings, bool permanent)
 		{
 			var disposables = new CompositeDisposable();
 			var transport = new ProfinetEthernetTransport(adapter);
@@ -43,13 +43,13 @@ namespace ProfinetTools.Logic.Services
 			{
 				System.Net.NetworkInformation.PhysicalAddress deviceAddress = System.Net.NetworkInformation.PhysicalAddress.Parse(macAddress);
 
-				DCP.BlockErrors err = transport.SendSetNameRequest(deviceAddress, timeoutInMilliseconds, retries, newSettings.Name);
+				DCP.BlockErrors err = transport.SendSetNameRequest(deviceAddress, timeoutInMilliseconds, retries, newSettings.Name, permanent);
 				if (err != DCP.BlockErrors.NoError) return Task.FromResult(new SaveResult(false, err.ToString()));
 
 				System.Net.IPAddress ip = System.Net.IPAddress.Parse(newSettings.IP);
 				System.Net.IPAddress subnet = System.Net.IPAddress.Parse(newSettings.SubnetMask);
 				System.Net.IPAddress gateway = System.Net.IPAddress.Parse(newSettings.Gateway);
-				err = transport.SendSetIpRequest(deviceAddress, timeoutInMilliseconds, retries, ip, subnet, gateway);
+				err = transport.SendSetIpRequest(deviceAddress, timeoutInMilliseconds, retries, ip, subnet, gateway, permanent);
 				if (err != DCP.BlockErrors.NoError) return Task.FromResult(new SaveResult(false, err.ToString()));
 
 				return Task.FromResult(new SaveResult(true, err.ToString()));
@@ -64,7 +64,59 @@ namespace ProfinetTools.Logic.Services
 			}
 		}
 
-		public Task<SaveResult> FactoryReset(ICaptureDevice adapter, string deviceName)
+        public Task<SaveResult> SendSignalRequest(ICaptureDevice adapter, string macAddress)
+        {
+            var disposables = new CompositeDisposable();
+			var transport = new ProfinetEthernetTransport(adapter);
+			transport.Open();
+			transport.AddDisposableTo(disposables);
+
+
+			try
+			{
+				System.Net.NetworkInformation.PhysicalAddress deviceAddress = System.Net.NetworkInformation.PhysicalAddress.Parse(macAddress);
+                DCP.BlockErrors err = transport.SendSetSignalRequest(deviceAddress, timeoutInMilliseconds, retries);
+				if (err != DCP.BlockErrors.NoError) return Task.FromResult(new SaveResult(false, err.ToString()));
+
+				return Task.FromResult(new SaveResult(true, err.ToString()));
+			}
+			catch (Exception e)
+			{
+				return Task.FromResult(new SaveResult(false, e.Message));
+			}
+			finally
+			{
+				disposables.Dispose();
+			}
+        }
+
+        public Task<SaveResult> SignalRequestStart(ICaptureDevice adapter, string macAddress, Device target)
+        {
+            var disposables = new CompositeDisposable();
+            var transport = new ProfinetEthernetTransport(adapter);
+
+            transport.Open();
+            transport.AddDisposableTo(disposables);
+
+            System.Net.NetworkInformation.PhysicalAddress deviceAddress = System.Net.NetworkInformation.PhysicalAddress.Parse(macAddress);
+            try
+            {
+                DCP.BlockErrors err = transport.SendSetSignalRequest(deviceAddress, timeoutInMilliseconds, retries);
+                if (err != DCP.BlockErrors.NoError) return Task.FromResult(new SaveResult(false, err.ToString()));
+
+                return Task.FromResult(new SaveResult(false, err.ToString()));
+            }
+            catch (Exception e)
+            {
+                return Task.FromResult(new SaveResult(false, e.Message));
+            }
+            finally
+            {
+                disposables.Dispose();
+            }
+        }
+
+        public Task<SaveResult> FactoryReset(ICaptureDevice adapter, string deviceName)
 		{
 			var disposables = new CompositeDisposable();
 			var transport = new ProfinetEthernetTransport(adapter);
