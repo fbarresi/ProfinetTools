@@ -473,11 +473,11 @@ namespace ProfinetTools.Logic.Transport
 			//ethernet
 			Ethernet.Encode(mem, destination, adapter.MacAddress, Ethernet.Type.VLanTaggedFrame);
 
-			//VLAN
-			VLAN.Encode(mem, VLAN.Priorities.Priority0, VLAN.Type.PN);
+            //VLAN
+            VLAN.Encode(mem, VLAN.Priorities.Priority0, VLAN.Type.PN);
 
-			//Profinet Real Time
-			RT.EncodeFrameId(mem, RT.FrameIds.DCP_Get_Set_PDU);
+            //Profinet Real Time
+            RT.EncodeFrameId(mem, RT.FrameIds.DCP_Get_Set_PDU);
 
 			//Profinet DCP
 			UInt32 xid = ++lastXid;
@@ -545,7 +545,12 @@ namespace ProfinetTools.Logic.Transport
 
 		public IAsyncResult BeginSetSignalRequest(PhysicalAddress destination)
 		{
-			return BeginSetRequest(destination, DCP.BlockOptions.Control_Signal, DCP.BlockQualifiers.Temporary, BitConverter.GetBytes((ushort)0x100));      //SignalValue - Flash once
+            // BitConverter.GetBytes() swaps the bytes of the value provided
+            // Option 1: Use 0x0001 instead of 0x0100
+            // Option 2: Reverse array bytes in data
+            byte[] data = BitConverter.GetBytes((ushort)0x0100);
+            Array.Reverse(data);
+			return BeginSetRequest(destination, DCP.BlockOptions.Control_Signal, DCP.BlockQualifiers.Temporary, data);      // SignalValue: 0x0100 - Flash once
 		}
 
 		public IAsyncResult BeginSetResetRequest(PhysicalAddress destination)
@@ -553,22 +558,22 @@ namespace ProfinetTools.Logic.Transport
 			return BeginSetRequest(destination, DCP.BlockOptions.Control_FactoryReset, DCP.BlockQualifiers.Permanent, null);
 		}
 
-		public IAsyncResult BeginSetNameRequest(PhysicalAddress destination, string name)
+		public IAsyncResult BeginSetNameRequest(PhysicalAddress destination, string name, bool permanent)
 		{
 			byte[] bytes = Encoding.ASCII.GetBytes(name);
-			return BeginSetRequest(destination, DCP.BlockOptions.DeviceProperties_NameOfStation, DCP.BlockQualifiers.Permanent, bytes);
+			return BeginSetRequest(destination, DCP.BlockOptions.DeviceProperties_NameOfStation, permanent ? DCP.BlockQualifiers.Permanent : DCP.BlockQualifiers.Temporary, bytes);
 		}
 
-		public IAsyncResult BeginSetIpRequest(PhysicalAddress destination, IPAddress ip, IPAddress subnetMask, IPAddress gateway)
+		public IAsyncResult BeginSetIpRequest(PhysicalAddress destination, IPAddress ip, IPAddress subnetMask, IPAddress gateway, bool permanent)
 		{
 			byte[] bytes = new byte[12];
 			Array.Copy(ip.GetAddressBytes(), 0, bytes, 0, 4);
 			Array.Copy(subnetMask.GetAddressBytes(), 0, bytes, 4, 4);
 			Array.Copy(gateway.GetAddressBytes(), 0, bytes, 8, 4);
-			return BeginSetRequest(destination, DCP.BlockOptions.IP_IPParameter, DCP.BlockQualifiers.Permanent, bytes);
+			return BeginSetRequest(destination, DCP.BlockOptions.IP_IPParameter, permanent ? DCP.BlockQualifiers.Permanent : DCP.BlockQualifiers.Temporary, bytes);
 		}
 
-		public IAsyncResult BeginSetIpFullRequest(PhysicalAddress destination, IPAddress ip, IPAddress subnetMask, IPAddress gateway, IPAddress[] dns)
+		public IAsyncResult BeginSetIpFullRequest(PhysicalAddress destination, IPAddress ip, IPAddress subnetMask, IPAddress gateway, IPAddress[] dns, bool permanent)
 		{
 			byte[] bytes = new byte[28];
 			Array.Copy(ip.GetAddressBytes(), 0, bytes, 0, 4);
@@ -577,7 +582,7 @@ namespace ProfinetTools.Logic.Transport
 			if (dns == null || dns.Length != 4) throw new ArgumentException("dns array length must be 4");
 			for (int i = 0; i < 4; i++)
 				Array.Copy(dns[i].GetAddressBytes(), 0, bytes, 12 + i * 4, 4);
-			return BeginSetRequest(destination, DCP.BlockOptions.IP_FullIPSuite, DCP.BlockQualifiers.Permanent, bytes);
+			return BeginSetRequest(destination, DCP.BlockOptions.IP_FullIPSuite, permanent ? DCP.BlockQualifiers.Permanent : DCP.BlockQualifiers.Temporary, bytes);
 		}
 
 		public DCP.BlockErrors SendSetRequest(PhysicalAddress destination, int timeoutMs, int retries, DCP.BlockOptions option, DCP.BlockQualifiers qualifiers, byte[] data)
@@ -597,9 +602,9 @@ namespace ProfinetTools.Logic.Transport
 			throw new TimeoutException("No response received");
 		}
 
-		public DCP.BlockErrors SendSetRequest(PhysicalAddress destination, int timeoutMs, int retries, DCP.BlockOptions option, byte[] data)
+		public DCP.BlockErrors SendSetRequest(PhysicalAddress destination, int timeoutMs, int retries, DCP.BlockOptions option, byte[] data, bool permanent)
 		{
-			return SendSetRequest(destination, timeoutMs, retries, option, DCP.BlockQualifiers.Permanent, data);
+			return SendSetRequest(destination, timeoutMs, retries, option, permanent ? DCP.BlockQualifiers.Permanent : DCP.BlockQualifiers.Temporary, data);
 		}
 
 		public Dictionary<DCP.BlockOptions, object> SendGetRequest(PhysicalAddress destination, int timeoutMs, int retries, DCP.BlockOptions option)
@@ -653,11 +658,11 @@ namespace ProfinetTools.Logic.Transport
 			throw new TimeoutException("No response received");
 		}
 
-		public DCP.BlockErrors SendSetNameRequest(PhysicalAddress destination, int timeoutMs, int retries, string name)
+		public DCP.BlockErrors SendSetNameRequest(PhysicalAddress destination, int timeoutMs, int retries, string name, bool permanent)
 		{
 			for (int r = 0; r < retries; r++)
 			{
-				IAsyncResult asyncResult = BeginSetNameRequest(destination, name);
+				IAsyncResult asyncResult = BeginSetNameRequest(destination, name, permanent);
 				try
 				{
 					return EndSetRequest(asyncResult, timeoutMs);
@@ -670,11 +675,11 @@ namespace ProfinetTools.Logic.Transport
 			throw new TimeoutException("No response received");
 		}
 
-		public DCP.BlockErrors SendSetIpFullRequest(PhysicalAddress destination, int timeoutMs, int retries, IPAddress ip, IPAddress subnetMask, IPAddress gateway, IPAddress[] dns)
+		public DCP.BlockErrors SendSetIpFullRequest(PhysicalAddress destination, int timeoutMs, int retries, IPAddress ip, IPAddress subnetMask, IPAddress gateway, IPAddress[] dns, bool permanent)
 		{
 			for (int r = 0; r < retries; r++)
 			{
-				IAsyncResult asyncResult = BeginSetIpFullRequest(destination, ip, subnetMask, gateway, dns);
+				IAsyncResult asyncResult = BeginSetIpFullRequest(destination, ip, subnetMask, gateway, dns, permanent);
 				try
 				{
 					return EndSetRequest(asyncResult, timeoutMs);
@@ -687,11 +692,11 @@ namespace ProfinetTools.Logic.Transport
 			throw new TimeoutException("No response received");
 		}
 
-		public DCP.BlockErrors SendSetIpRequest(PhysicalAddress destination, int timeoutMs, int retries, IPAddress ip, IPAddress subnetMask, IPAddress gateway)
+		public DCP.BlockErrors SendSetIpRequest(PhysicalAddress destination, int timeoutMs, int retries, IPAddress ip, IPAddress subnetMask, IPAddress gateway, bool permanent)
 		{
 			for (int r = 0; r < retries; r++)
 			{
-				IAsyncResult asyncResult = BeginSetIpRequest(destination, ip, subnetMask, gateway);
+				IAsyncResult asyncResult = BeginSetIpRequest(destination, ip, subnetMask, gateway, permanent);
 				try
 				{
 					return EndSetRequest(asyncResult, timeoutMs);
