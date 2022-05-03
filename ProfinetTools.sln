@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfinetTools", "ProfinetTools\ProfinetTools.csproj", "{8C9C17B3-A185-4D73-9645-A8871F7B17EC}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfinetTools.Logic", "ProfinetTools.Logic\ProfinetTools.Logic.csproj", "{6696F4A6-C9A5-49F3-8463-16A85BACB6E6}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "ProfinetTools.Setup", "ProfinetTools.Setup\ProfinetTools.Setup.wixproj", "{E6C11D5C-ED2C-43A9-8DF9-15D36DF77F6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfinetMonitor", "ProfinetMonitor\ProfinetMonitor.csproj", "{98B9B592-2686-4FEF-B950-91A1D27ABCB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +62,14 @@ Global
 		{E6C11D5C-ED2C-43A9-8DF9-15D36DF77F6F}.Release|Any CPU.Build.0 = Release|x86
 		{E6C11D5C-ED2C-43A9-8DF9-15D36DF77F6F}.Release|x86.ActiveCfg = Release|x86
 		{E6C11D5C-ED2C-43A9-8DF9-15D36DF77F6F}.Release|x86.Build.0 = Release|x86
+		{98B9B592-2686-4FEF-B950-91A1D27ABCB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98B9B592-2686-4FEF-B950-91A1D27ABCB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98B9B592-2686-4FEF-B950-91A1D27ABCB3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{98B9B592-2686-4FEF-B950-91A1D27ABCB3}.Debug|x86.Build.0 = Debug|Any CPU
+		{98B9B592-2686-4FEF-B950-91A1D27ABCB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98B9B592-2686-4FEF-B950-91A1D27ABCB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98B9B592-2686-4FEF-B950-91A1D27ABCB3}.Release|x86.ActiveCfg = Release|Any CPU
+		{98B9B592-2686-4FEF-B950-91A1D27ABCB3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
